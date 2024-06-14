@@ -8,6 +8,8 @@ import com.example.curdapi.service.EmpService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 public class EmpServiceImpl extends EmpService {
@@ -28,6 +30,22 @@ public class EmpServiceImpl extends EmpService {
         employee.setFirstName(empDto.getFirstname());
         employeeRepo.save(employee);
         return EmpMapper.mapToEmpDto(employeeRepo.save(employee));
+    }
+
+    @Override
+    public EmpDto deleteEmp (EmpDto empDto) {
+        Employee employee = employeeRepo.findByEmail(empDto.getEmail());
+        try{
+            employeeRepo.delete(employee);
+            return EmpMapper.mapToEmpDto(employee);
+        } catch (Exception e){
+            return EmpMapper.mapToEmpDto(null);
+        }
+
+    }
+
+    public List<Employee> getAllEmps() {
+        return employeeRepo.findAll();
     }
 }
 
